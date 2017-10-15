@@ -9,15 +9,23 @@ import com.sainsburys.services.plpsummary.request.ProductListingPageSummaryReque
 import com.sainsburys.services.plpsummary.response.ProductListingPageSummaryResponse;
 import com.sainsburys.services.plpsummary.service.ProductListingPageSummaryService;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class ProductListingPageSummaryApplication {
 
-    private static final String URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html";
+    private static final String FALLBACK_URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html";
 
     public static void main(String[] args) {
 
-        ProductListingPageSummaryRequest productListingPageSummaryRequest  = new ProductListingPageSummaryRequest(URL);
+        ProductListingPageSummaryRequest productListingPageSummaryRequest;
+
+        if (args.length > 0) {
+            productListingPageSummaryRequest = new ProductListingPageSummaryRequest(Arrays.asList(args));
+        } else {
+            productListingPageSummaryRequest = new ProductListingPageSummaryRequest(new ArrayList<>(Collections.singletonList(FALLBACK_URL)));
+        }
 
         Injector injector = Guice.createInjector(new ProductListingPageSummaryServiceModule());
         ProductListingPageSummaryService productListingPageSummaryService = injector.getInstance(ProductListingPageSummaryService.class);
@@ -25,7 +33,7 @@ public class ProductListingPageSummaryApplication {
             ProductListingPageSummaryResponse productListingPageSummaryResponse = productListingPageSummaryService.createProductListingPageSummary(productListingPageSummaryRequest);
             Gson gson = new GsonBuilder().disableHtmlEscaping().create();
             System.out.println(gson.toJson(productListingPageSummaryResponse));
-        } catch (IOException e) {
+        } catch (Exception e) {
             //TODO RDP: Improve messaging here to the caller!!!
             System.out.println("Something went wrong...fix it.");
         }

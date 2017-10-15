@@ -3,18 +3,22 @@ package com.sainsburys.services.plpsummary.request;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductListingPageSummaryRequestTest {
 
     @Test
-    public void shouldSetUrlGivenCorrectValuePassedIntoConstructor() {
+    public void shouldSetSourcesListGivenCorrectValuesPassedIntoConstructor() {
 
         //Given
-        String url = "dummyUrl";
+        List<String> sourcesList = new ArrayList<>();
+        sourcesList.add("mockSource");
 
         //When
-        ProductListingPageSummaryRequest productListingPageSummaryRequest = new ProductListingPageSummaryRequest(url);
+        ProductListingPageSummaryRequest productListingPageSummaryRequest = new ProductListingPageSummaryRequest(sourcesList);
 
         //then
-        Assert.assertEquals("List should be equal to url passed in.", url, productListingPageSummaryRequest.getUrl());
+        Assert.assertEquals("List should be equal to list passed in.", sourcesList, productListingPageSummaryRequest.getSourcesList());
     }
 }

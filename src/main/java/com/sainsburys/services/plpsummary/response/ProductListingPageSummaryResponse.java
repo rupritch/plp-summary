@@ -12,6 +12,8 @@ public class ProductListingPageSummaryResponse {
 
     private BigDecimal total;
 
+    private List<ProductListingPageSummary> productListingPageSummaries;
+
     public List<Product> getProductList() {
         return productList;
     }
@@ -26,5 +28,13 @@ public class ProductListingPageSummaryResponse {
 
     public void setTotal(final BigDecimal total) {
         this.total = total;
+    }
+
+    public List<ProductListingPageSummary> getProductListingPageSummaries() {
+        return productListingPageSummaries;
+    }
+
+    public void setProductListingPageSummaries(final List<ProductListingPageSummary> productListingPageSummaries) {
+        this.productListingPageSummaries = productListingPageSummaries;
     }
 }

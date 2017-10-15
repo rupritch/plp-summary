@@ -1,14 +1,16 @@
 package com.sainsburys.services.plpsummary.request;
 
+import java.util.List;
+
 public class ProductListingPageSummaryRequest {
 
-    private String url;
+    private List<String> sourcesList;
 
-    public ProductListingPageSummaryRequest(String url) {
-        this.url = url;
+    public ProductListingPageSummaryRequest(List<String> sourcesList) {
+        this.sourcesList = sourcesList;
     }
 
-    public String getUrl() {
-        return url;
+    public List<String> getSourcesList() {
+        return sourcesList;
     }
 }

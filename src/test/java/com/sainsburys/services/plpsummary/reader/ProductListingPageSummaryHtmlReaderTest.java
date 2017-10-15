@@ -1,6 +1,7 @@
 package com.sainsburys.services.plpsummary.reader;
 
 import com.sainsburys.services.plpsummary.response.Product;
+import com.sainsburys.services.plpsummary.response.ProductListingPageSummary;
 import com.sainsburys.services.plpsummary.response.ProductListingPageSummaryResponse;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,21 +30,25 @@ public class ProductListingPageSummaryHtmlReaderTest {
     private ProductListingPageHtmlReader mockProductListingPageHtmlReader;
 
     @Mock
+    private ProductListingPageSummary mockProductListingPageSummary;
+
+    @Mock
     private Product mockProduct;
 
     @InjectMocks
     private ProductListingPageSummaryHtmlReader productListingPageSummaryHtmlReader;
 
     private static final String URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html";
+    private static final String URL1 = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html";
 
     @Test
-    public void shouldSetProductListOnResponseGivenValidUrlContainingPDPLinks() throws IOException {
+    public void shouldSetProductListOnResponseGivenValidSingleUrlContainingPDPLinks() throws IOException {
 
         //Given
         //Valid Url
         ProductListingPageSummaryResponse productListingPageSummaryResponse = new ProductListingPageSummaryResponse();
-        ProductListingPageSummaryHtmlReader productListingPageSummaryHtmlReader1 = new ProductListingPageSummaryHtmlReader(
-                productListingPageSummaryResponse, mockProductDetailsHtmlReader, mockProductListingPageHtmlReader);
+        ProductListingPageSummaryHtmlReader productListingPageSummaryHtmlReader = new ProductListingPageSummaryHtmlReader(
+                productListingPageSummaryResponse, mockProductDetailsHtmlReader, mockProductListingPageHtmlReader, mockProductListingPageSummary);
         List<String> pdpUrls = new ArrayList<>();
         pdpUrls.add("https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-cherry-punnet-200g-468015-p-44.html");
         pdpUrls.add("https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-raspberries--taste-the-difference-150g.html");
@@ -53,7 +58,7 @@ public class ProductListingPageSummaryHtmlReaderTest {
         Mockito.when(mockProduct.getPricePerUnit()).thenReturn(new BigDecimal(1.00));
 
         //When
-        productListingPageSummaryResponse = productListingPageSummaryHtmlReader1.readProductListingPage(URL);
+        productListingPageSummaryResponse = productListingPageSummaryHtmlReader.readSingleProductListingPage(URL);
 
         //Then
         Assert.assertEquals(mockProduct, productListingPageSummaryResponse.getProductList().get(0));
@@ -61,13 +66,13 @@ public class ProductListingPageSummaryHtmlReaderTest {
     }
 
     @Test
-    public void shouldSetCorrectTotalSumOnResponseGivenValidProductsWithPricesReturnedFromPDPReader() throws IOException {
+    public void shouldSetCorrectTotalSumOnResponseGivenValidSingleProductsWithPricesReturnedFromPDPReader() throws IOException {
 
         //Given
         //Valid Url
         ProductListingPageSummaryResponse productListingPageSummaryResponse = new ProductListingPageSummaryResponse();
-        ProductListingPageSummaryHtmlReader productListingPageSummaryHtmlReader1 = new ProductListingPageSummaryHtmlReader(
-                productListingPageSummaryResponse, mockProductDetailsHtmlReader, mockProductListingPageHtmlReader);
+        ProductListingPageSummaryHtmlReader productListingPageSummaryHtmlReader = new ProductListingPageSummaryHtmlReader(
+                productListingPageSummaryResponse, mockProductDetailsHtmlReader, mockProductListingPageHtmlReader, mockProductListingPageSummary);
         List<String> pdpUrls = new ArrayList<>();
         pdpUrls.add("https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-cherry-punnet-200g-468015-p-44.html");
         pdpUrls.add("https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-raspberries--taste-the-difference-150g.html");
@@ -77,20 +82,94 @@ public class ProductListingPageSummaryHtmlReaderTest {
         Mockito.when(mockProduct.getPricePerUnit()).thenReturn(new BigDecimal(4.00));
 
         //When
-        productListingPageSummaryResponse = productListingPageSummaryHtmlReader1.readProductListingPage(URL);
+        productListingPageSummaryResponse = productListingPageSummaryHtmlReader.readSingleProductListingPage(URL);
 
         //Then
         Assert.assertEquals(new BigDecimal(8.00).setScale(2, BigDecimal.ROUND_HALF_UP), productListingPageSummaryResponse.getTotal());
     }
 
+    @Test
+    public void shouldSetProductListingPageSummariesOnResponseGivenValidMultiplePLPUrlsContainingPDPLinks() throws IOException {
+
+        //Given
+        List<String> plpUrls = new ArrayList<>();
+        plpUrls.add(URL);
+        plpUrls.add(URL1);
+        ProductListingPageSummaryResponse productListingPageSummaryResponse = new ProductListingPageSummaryResponse();
+        ProductListingPageSummary productListingPageSummary = new ProductListingPageSummary();
+        ProductListingPageSummaryHtmlReader productListingPageSummaryHtmlReader1 = new ProductListingPageSummaryHtmlReader(
+                productListingPageSummaryResponse, mockProductDetailsHtmlReader, mockProductListingPageHtmlReader, productListingPageSummary);
+        List<String> pdpUrls = new ArrayList<>();
+        pdpUrls.add("https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-cherry-punnet-200g-468015-p-44.html");
+        pdpUrls.add("https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-raspberries--taste-the-difference-150g.html");
+
+        Mockito.when(mockProductListingPageHtmlReader.createListOfProductDetailPageUrlsForPage(URL)).thenReturn(pdpUrls);
+        Mockito.when(mockProductDetailsHtmlReader.readProductDetails(Mockito.any())).thenReturn(mockProduct);
+        Mockito.when(mockProduct.getPricePerUnit()).thenReturn(new BigDecimal(3.50));
+
+        //When
+        productListingPageSummaryResponse = productListingPageSummaryHtmlReader1.readMultipleProductListingPages(plpUrls);
+
+        //Then
+        Assert.assertEquals(mockProduct, productListingPageSummaryResponse.getProductListingPageSummaries().get(0).getProductList().get(0));
+        Assert.assertEquals(mockProduct, productListingPageSummaryResponse.getProductListingPageSummaries().get(0).getProductList().get(1));
+
+        Assert.assertEquals(mockProduct, productListingPageSummaryResponse.getProductListingPageSummaries().get(1).getProductList().get(0));
+        Assert.assertEquals(mockProduct, productListingPageSummaryResponse.getProductListingPageSummaries().get(1).getProductList().get(1));
+    }
+
+    @Test
+    public void shouldSetCorrectTotalSumOnEachPLPSummaryGivenValidMultipleProductsWithPricesReturnedFromPDPReader() throws IOException {
+
+        //Given
+        List<String> plpUrls = new ArrayList<>();
+        plpUrls.add(URL);
+        plpUrls.add(URL1);
+        ProductListingPageSummaryResponse productListingPageSummaryResponse = new ProductListingPageSummaryResponse();
+        ProductListingPageSummary productListingPageSummary = new ProductListingPageSummary();
+        ProductListingPageSummaryHtmlReader productListingPageSummaryHtmlReader1 = new ProductListingPageSummaryHtmlReader(
+                productListingPageSummaryResponse, mockProductDetailsHtmlReader, mockProductListingPageHtmlReader, productListingPageSummary);
+        List<String> pdpUrls = new ArrayList<>();
+        pdpUrls.add("https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-cherry-punnet-200g-468015-p-44.html");
+        pdpUrls.add("https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/shop/gb/groceries/berries-cherries-currants/sainsburys-raspberries--taste-the-difference-150g.html");
+
+        Mockito.when(mockProductListingPageHtmlReader.createListOfProductDetailPageUrlsForPage(plpUrls.get(0))).thenReturn(pdpUrls);
+        Mockito.when(mockProductListingPageHtmlReader.createListOfProductDetailPageUrlsForPage(plpUrls.get(1))).thenReturn(pdpUrls);
+        Mockito.when(mockProductDetailsHtmlReader.readProductDetails(Mockito.any())).thenReturn(mockProduct);
+        Mockito.when(mockProduct.getPricePerUnit()).thenReturn(new BigDecimal(4.00));
+
+        //When
+        productListingPageSummaryResponse = productListingPageSummaryHtmlReader1.readMultipleProductListingPages(plpUrls);
+
+        //Then
+        Assert.assertEquals(new BigDecimal(8.00).setScale(2, BigDecimal.ROUND_HALF_UP), productListingPageSummaryResponse.getProductListingPageSummaries().get(0).getTotal());
+        Assert.assertEquals(new BigDecimal(8.00).setScale(2, BigDecimal.ROUND_HALF_UP), productListingPageSummaryResponse.getProductListingPageSummaries().get(1).getTotal());
+
+    }
+
     @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionGivenInvalidUrl() throws IOException {
+    public void shouldThrowExceptionGivenInvalidSingleUrl() throws IOException {
 
         //Given
         String invalidUrl = "INVALID_URL";
 
         //When
-        productListingPageSummaryHtmlReader.readProductListingPage(invalidUrl);
+        productListingPageSummaryHtmlReader.readSingleProductListingPage(invalidUrl);
+
+        //Then
+        //Throws IllegalArgumentException.
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionGivenInvalidUrlInListOfMultipleUrls() throws IOException {
+
+        //Given
+        List<String> urls = new ArrayList<>();
+        urls.add("INVALID_URL");
+        urls.add("INVALID_URL2");
+
+        //When
+        productListingPageSummaryHtmlReader.readMultipleProductListingPages(urls);
 
         //Then
         //Throws IllegalArgumentException.
@@ -105,7 +184,7 @@ public class ProductListingPageSummaryHtmlReaderTest {
         Mockito.when(mockProductListingPageHtmlReader.createListOfProductDetailPageUrlsForPage(URL)).thenReturn(Collections.singletonList(unreachablePdpUrl));
 
         //When
-        productListingPageSummaryHtmlReader.readProductListingPage(URL);
+        productListingPageSummaryHtmlReader.readSingleProductListingPage(URL);
 
         //Then
         //Throws IO Exception

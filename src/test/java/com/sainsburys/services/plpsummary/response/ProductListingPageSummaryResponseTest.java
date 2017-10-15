@@ -16,6 +16,9 @@ public class ProductListingPageSummaryResponseTest {
     @Mock
     private Product mockProduct;
 
+    @Mock
+    private ProductListingPageSummary mockProductListingPageSummary;
+
     @Test
     public void shouldGetAndSetProductList() {
 
@@ -43,5 +46,20 @@ public class ProductListingPageSummaryResponseTest {
 
         //Then
         Assert.assertEquals(total, productListingPageSummaryResponse.getTotal());
+    }
+
+    @Test
+    public void shouldGetAndSetProductListingPageSummaries() {
+
+        //Given
+        List<ProductListingPageSummary> productListingPageSummaries = new ArrayList<>();
+        productListingPageSummaries.add(mockProductListingPageSummary);
+        ProductListingPageSummaryResponse productListingPageSummaryResponse = new ProductListingPageSummaryResponse();
+
+        //When
+        productListingPageSummaryResponse.setProductListingPageSummaries(productListingPageSummaries);
+
+        //Then
+        Assert.assertEquals(productListingPageSummaries, productListingPageSummaryResponse.getProductListingPageSummaries());
     }
 }

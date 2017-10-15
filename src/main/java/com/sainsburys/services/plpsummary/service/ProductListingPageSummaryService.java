@@ -28,10 +28,15 @@ public class ProductListingPageSummaryService {
     public ProductListingPageSummaryResponse createProductListingPageSummary(ProductListingPageSummaryRequest productListingPageSummaryRequest)
             throws IOException {
 
-        if (productListingPageSummaryRequest.getUrl() != null && !productListingPageSummaryRequest.getUrl().isEmpty()) {
-            return productListingPageSummaryReader.readProductListingPage(productListingPageSummaryRequest.getUrl());
+        if (productListingPageSummaryRequest.getSourcesList() != null && !productListingPageSummaryRequest.getSourcesList().isEmpty()) {
+
+            if (productListingPageSummaryRequest.getSourcesList().size() == 1) {
+                return productListingPageSummaryReader.readSingleProductListingPage(productListingPageSummaryRequest.getSourcesList().get(0));
+            } else {
+                return productListingPageSummaryReader.readMultipleProductListingPages(productListingPageSummaryRequest.getSourcesList());
+            }
         } else {
-            throw new IllegalArgumentException("Request object does not contain a url");
+            throw new IllegalArgumentException("Request object does not contain non empty source location list");
         }
     }
 }
