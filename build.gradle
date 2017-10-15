@@ -1,0 +1,14 @@
+group 'com.sainsburys.services'
+version '1.0-RELEASE'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}
