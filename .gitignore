@@ -9,6 +9,9 @@ plp-summary.iml
 .idea/gradle.xml
 .idea/libraries
 
+# IntelliJ
+out/
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
