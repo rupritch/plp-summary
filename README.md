@@ -1,23 +1,27 @@
 # plp-summary
 Service to provide a summary of products listed on a Sainsbury's product listing page.
 
-Accepts none or multiple arguments.
-If no argument is supplied it will use a fallback url to generate the response.
-If an argument is supplied and it is a valid url it will be used to generate the response.
-If multiple arguments are supplied and all are valid urls they will be used to generate the response.
+Accepts none or multiple arguments:
+- If no argument is supplied it will use a fallback url to generate the response.
+- If an argument is supplied and it is a valid url it will be used to generate the response.
+- If multiple arguments are supplied and all are valid urls they will be used to generate the response.
 
-Currently the service only supports looking up product listing information from a PLP url. However this could easily be expanded in future to accept other locations to read the data from.
+Currently the service only supports looking up product listing information from a PLP url. However this could be expanded in future to accept other locations to read in data from.
 
 On successful completion a plp-summary.json file is created containing the PLP details in the root dir of the project.
+
+Limitations:
+The application currently expects the html of the url passed in to conform to the same structure as the Sainsbury's Berries, Cherries & Currants PLP.
+If the url passed in doesn't have the same html structure then it will return an exception and no results will read.
 
 # Building
 This project is using gradle for building.
 
-For Linux/macOx:
+For Linux/macOS:
 
-Gradle uses the following command structure ``./gradlew <task> (on Unix-like platforms such as Linux and Mac OS X)``.
+Gradle uses the following command structure ``./gradlew <task> (on Unix-like platforms such as Linux and Mac OS)``.
 In order to build this project follow the steps below:
-1. Check out the code to your machine from the following location ``https://github.com/rupritch/plp-summary.git``.
+1. Check out the code to your machine from the following location ``git clone https://github.com/rupritch/plp-summary.git``.
 2. From the root of the checked out project run ``./gradlew clean build``.
 
 For Windows:
@@ -39,6 +43,8 @@ The application can be run from the root directly with a number of different arg
 - No arguments: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar``.
 - Single Argument: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html``.
 - Multiple Arguments: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html``.
+
+To view the output now from the project root run: ``vi plp-summary.json``.
 
 # Dependencies
 
