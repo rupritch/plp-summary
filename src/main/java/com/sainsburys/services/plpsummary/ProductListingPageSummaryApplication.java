@@ -30,13 +30,16 @@ public class ProductListingPageSummaryApplication {
         ProductListingPageSummaryRequest productListingPageSummaryRequest;
 
         if (args.length > 0) {
+            logger.info("Using passed in sources to build response");
             productListingPageSummaryRequest = new ProductListingPageSummaryRequest(Arrays.asList(args));
         } else {
+            logger.info("Using fallback source to build response");
             productListingPageSummaryRequest = new ProductListingPageSummaryRequest(new ArrayList<>(Collections.singletonList(FALLBACK_URL)));
         }
 
         Injector injector = Guice.createInjector(new ProductListingPageSummaryServiceModule());
         ProductListingPageSummaryService productListingPageSummaryService = injector.getInstance(ProductListingPageSummaryService.class);
+        
         try (FileWriter fileWriter = new FileWriter("plp-summary.json")) {
             ProductListingPageSummaryResponse productListingPageSummaryResponse = productListingPageSummaryService.createProductListingPageSummary(productListingPageSummaryRequest);
             Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
