@@ -3,6 +3,8 @@ package com.sainsburys.services.plpsummary.reader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.stream.Collectors;
  */
 public class ProductListingPageHtmlReader {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductListingPageHtmlReader.class);
+
     /**
      * Creates a list of product detail page absolute urls for each product on the passed in product listing page.
      * @param plpUrl: html document for the product listing page.
@@ -20,6 +24,7 @@ public class ProductListingPageHtmlReader {
      */
     public List<String> createListOfProductDetailPageUrlsForPage(final String plpUrl) throws IOException {
 
+        logger.debug("Reading PDP urls from PLP");
         Document plpDocument = parseHtmlFromUrl(plpUrl);
         Elements products = plpDocument.getElementsByClass("productInfo");
 
@@ -30,6 +35,7 @@ public class ProductListingPageHtmlReader {
 
     public String readProductListingPageTitle(final String plpUrl) throws IOException {
 
+        logger.debug("Reading PLP title");
         Document plpDocument = parseHtmlFromUrl(plpUrl);
         return plpDocument.getElementById("resultsHeading").text();
     }
@@ -42,11 +48,7 @@ public class ProductListingPageHtmlReader {
      */
     private Document parseHtmlFromUrl(final String url) throws IOException {
 
-        if (!url.contains(".html")) {
-            Document document = Jsoup.connect(url).get();
-            String baseUri = document.baseUri();
-            return Jsoup.connect(baseUri + ".html").get();
-        }
+        logger.info("Parsing PLP url: " + url);
         return Jsoup.connect(url).get();
     }
 }

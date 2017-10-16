@@ -26,5 +26,4 @@ public interface ProductListingPageSummaryReader {
      * @throws IOException: Something went wrong in connecting to the source.
      */
     ProductListingPageSummaryResponse readMultipleProductListingPages(List<String> sourcesList) throws IOException;
-
 }

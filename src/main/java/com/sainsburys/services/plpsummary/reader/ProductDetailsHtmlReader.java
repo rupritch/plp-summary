@@ -4,15 +4,22 @@ import com.sainsburys.services.plpsummary.response.Product;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
+/**
+ * Reads all the Product information required of the service from a html document of a product details page.
+ */
 public class ProductDetailsHtmlReader {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductDetailsHtmlReader.class);
+
     /**
-     * Reads and initialises a new Product with the following product details read from a passed in html document of a product details page:
+     * Reads and initialises a new Product with the following product details read from a product details page html:
      * - title
      * - kcalPer100g
      * - pricePerUnit
@@ -22,6 +29,7 @@ public class ProductDetailsHtmlReader {
      */
     public Product readProductDetails(Document document) {
 
+        logger.debug("Reading product details");
         String title = readProductTitle(document);
         Integer kcalPer100g = readKcalPer100g(document);
         BigDecimal pricePerUnit = readProductPricePerUnit(document);
@@ -31,25 +39,30 @@ public class ProductDetailsHtmlReader {
 
     /**
      * Returns the product title from the product details page.
+     * Note: Every PDP is expected to have a product title. If can't find one then will need to investigate why it doesn't.
+     * Therefore am allowing any unexpected NPE exceptions to terminate the request.
      * @param document: Html document from a product details page.
      * @return String: product title.
      */
     private String readProductTitle(Document document) {
+        logger.debug("Reading product title");
         return document.getElementsByClass("productTitleDescriptionContainer").first().text();
     }
 
     /**
      * Returns the first line of the product description from the product details page.
+     * Note: Every PDP is expected to have a product description. If can't find one then will need to investigate why it doesn't.
+     * Therefore am allowing any unexpected NPE exceptions to terminate the request.
      * @param document: Html document from a product details page.
      * @return String: 1st line of the product description.
      */
     private String readProductDescription(Document document) {
 
+        logger.debug("Reading product description");
         Element element = document.getElementById("information").getElementsByClass("productText").first();
         if (isDescriptionMultipleLines(element)) {
             return element.getElementsByClass("memo").first().text().trim();
         }
-        return element.getElementsByTag("p").text().trim();
         if (element.getElementsByTag("p").first().hasText()) {
             return element.getElementsByTag("p").first().text().trim();
         } else {
@@ -69,11 +82,14 @@ public class ProductDetailsHtmlReader {
 
     /**
      * Returns the price per unit of product from the product details page.
+     * Every PDP is expected to have a product price per unit value. If can't find one then will need to investigate why it doesn't.
+     * Therefore am allowing any unexpected NPE exceptions to terminate the request.
      * @param document: Html document from a product details page.
      * @return BigDecimal: pricePerUnit.
      */
     private BigDecimal readProductPricePerUnit(Document document) {
 
+        logger.debug("Reading product price per unit");
         return new BigDecimal(document.getElementsByClass("pricePerUnit")
                 .first()
                 .text()
@@ -89,6 +105,7 @@ public class ProductDetailsHtmlReader {
      */
     private Integer readKcalPer100g(Document document) {
 
+        logger.debug("Reading product kcalPer100g");
         Elements table = document.getElementsByClass("nutritionTable");
 
         if (table != null && !table.isEmpty()) {
@@ -107,6 +124,7 @@ public class ProductDetailsHtmlReader {
                 }
             }
         }
+        logger.info("No kcalPer100g found.");
         return null;
     }
 }

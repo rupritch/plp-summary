@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.sainsburys.services.plpsummary.config.ProductListingPageSummaryServiceModule;
-import com.sainsburys.services.plpsummary.reader.ProductListingPageSummaryHtmlReader;
 import com.sainsburys.services.plpsummary.request.ProductListingPageSummaryRequest;
 import com.sainsburys.services.plpsummary.response.ProductListingPageSummaryResponse;
 import com.sainsburys.services.plpsummary.service.ProductListingPageSummaryService;
@@ -22,7 +21,7 @@ import java.util.Collections;
  */
 public class ProductListingPageSummaryApplication {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductListingPageSummaryHtmlReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductListingPageSummaryApplication.class);
 
     private static final String FALLBACK_URL = "https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html";
 
@@ -43,7 +42,7 @@ public class ProductListingPageSummaryApplication {
             Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
             logger.info("Writing output to plp-summary.json file");
             fileWriter.write(gson.toJson(productListingPageSummaryResponse));
-            logger.info("PLP summary generated successfully. Please check plp-summary.json for output");
+            logger.info("PLP summary generated successfully. Please open plp-summary.json to view the output");
         } catch (Exception e) {
             logger.error("Fatal error executing request for PLP summaries. Reason: ", e);
         }
