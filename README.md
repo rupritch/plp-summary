@@ -26,9 +26,9 @@ The test will run as part of the build, however you can run the unit tests separ
 
 The application can be run from the root directly with a number of different arguments:
 
-No arguments: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar``.
-Single Argument: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html``.
-Multiple Arguments: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html``.
+- No arguments: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar``.
+- Single Argument: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html``.
+- Multiple Arguments: ``java -jar ./build/libs/plp-summary-1.0-RELEASE.jar https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html https://jsainsburyplc.github.io/serverside-test/site/www.sainsburys.co.uk/webapp/wcs/stores/servlet/gb/groceries/berries-cherries-currants6039.html``.
 
 # Dependencies
 
