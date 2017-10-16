@@ -18,7 +18,7 @@ public class ProductTest {
 
     private String description = "description";
 
-    private String kcalPer100g = "kcalPer100g";
+    private Integer kcalPer100g = 10;
 
     @Test
     public void shouldSetAllFieldsGivenValidParametersInConstructor() {
@@ -50,5 +50,4 @@ public class ProductTest {
         //Then
         Assert.assertEquals(expectedProductToString, productString);
     }
-
 }

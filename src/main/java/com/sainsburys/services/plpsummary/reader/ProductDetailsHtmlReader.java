@@ -23,7 +23,7 @@ public class ProductDetailsHtmlReader {
     public Product readProductDetails(Document document) {
 
         String title = readProductTitle(document);
-        String kcalPer100g = readKcalPer100g(document);
+        Integer kcalPer100g = readKcalPer100g(document);
         BigDecimal pricePerUnit = readProductPricePerUnit(document);
         String description = readProductDescription(document);
         return new Product(title, kcalPer100g, pricePerUnit, description);
@@ -77,22 +77,29 @@ public class ProductDetailsHtmlReader {
 
     /**
      * Returns the kcal per 100g value from the nutrition information table on product details page.
+     * Every PDP is not expected to have a kcal per 100g so am explicitly checking for potential npe.
+     * If no kcalPer100g value is found then null is returned.
      * @param document: Html document from a product details page.
      * @return String or null: kcalPer100g value if found otherwise will return null.
      */
-    private String readKcalPer100g(Document document) {
+    private Integer readKcalPer100g(Document document) {
 
         Elements table = document.getElementsByClass("nutritionTable");
 
         if (table != null && !table.isEmpty()) {
             Elements tableHeader = table.select("thead");
-            Elements columnHeadings = tableHeader.get(0).select("th");
-            OptionalInt column = IntStream.range(1, columnHeadings.size())
-                    .filter(columnIndex -> columnHeadings.get(columnIndex).text().toLowerCase().contains("per 100g"))
-                    .findFirst();
-            if (column.isPresent() && column.getAsInt()-1 >= 0) {
-                Elements tableRows = table.get(0).select("tr");
-                return tableRows.get(2).select("td").get(column.getAsInt()-1).text().replace("kcal", "");
+            if (tableHeader != null && !tableHeader.isEmpty()) {
+                Elements columnHeadings = tableHeader.get(0).select("th");
+                if (columnHeadings != null && !columnHeadings.isEmpty()) {
+                    OptionalInt column = IntStream.range(1, columnHeadings.size() -1)
+                            .filter(columnIndex -> columnHeadings.get(columnIndex).text().toLowerCase().contains("per 100g"))
+                            .findFirst();
+                    if (column.isPresent() && column.getAsInt()-1 >= 0) {
+                        Elements tableRows = table.get(0).select("tr");
+                        String kcal = tableRows.get(2).select("td").get(column.getAsInt()-1).text().replace("kcal", "");
+                        return Integer.valueOf(kcal);
+                    }
+                }
             }
         }
         return null;

@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.math.BigDecimal;
 
+/**
+ * Product Data
+ */
 public class Product {
 
     /**
@@ -15,7 +18,7 @@ public class Product {
      * Kcal Per 100g of the product. May not always be present.
      */
     @SerializedName("kcal_per_100g")
-    private String kcalPer100g;
+    private Integer kcalPer100g;
 
     /**
      * Price per unit of the product (eg. 1.56)
@@ -28,7 +31,7 @@ public class Product {
      */
     private String description;
 
-    public Product(String title, String kcalPer100g, BigDecimal pricePerUnit, String description) {
+    public Product(String title, Integer kcalPer100g, BigDecimal pricePerUnit, String description) {
         this.title = title;
         this.kcalPer100g = kcalPer100g;
         this.pricePerUnit = pricePerUnit;
@@ -39,7 +42,7 @@ public class Product {
         return title;
     }
 
-    public String getKcalPer100g() {
+    public Integer getKcalPer100g() {
         return kcalPer100g;
     }
 

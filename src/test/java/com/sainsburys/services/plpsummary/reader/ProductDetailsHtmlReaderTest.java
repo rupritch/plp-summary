@@ -89,7 +89,7 @@ public class ProductDetailsHtmlReaderTest {
 
         //Then
         Assert.assertNotNull(product);
-        Assert.assertEquals("45", product.getKcalPer100g());
+        Assert.assertEquals(new Integer(45), product.getKcalPer100g());
     }
 
     @Test
