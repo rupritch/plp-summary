@@ -1,6 +1,8 @@
 package com.sainsburys.services.plpsummary.config;
 
 import com.google.inject.AbstractModule;
+import com.sainsburys.services.plpsummary.reader.ProductDetailsHtmlReader;
+import com.sainsburys.services.plpsummary.reader.ProductListingPageHtmlReader;
 import com.sainsburys.services.plpsummary.reader.ProductListingPageSummaryHtmlReader;
 import com.sainsburys.services.plpsummary.reader.ProductListingPageSummaryReader;
 import com.sainsburys.services.plpsummary.response.ProductListingPageSummaryResponse;
@@ -14,5 +16,7 @@ public class ProductListingPageSummaryServiceModule extends AbstractModule {
     protected void configure() {
         bind(ProductListingPageSummaryReader.class).to(ProductListingPageSummaryHtmlReader.class);
         bind(ProductListingPageSummaryResponse.class);
+        bind(ProductDetailsHtmlReader.class);
+        bind(ProductListingPageHtmlReader.class);
     }
 }
