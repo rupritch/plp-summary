@@ -50,6 +50,11 @@ public class ProductDetailsHtmlReader {
             return element.getElementsByClass("memo").first().text().trim();
         }
         return element.getElementsByTag("p").text().trim();
+        if (element.getElementsByTag("p").first().hasText()) {
+            return element.getElementsByTag("p").first().text().trim();
+        } else {
+            return element.getElementsByTag("p").text().trim();
+        }
     }
 
     /**
