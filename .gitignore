@@ -4,6 +4,7 @@
 # User-specific stuff:
 .idea
 plp-summary.iml
+plp-summary.json
 
 # Gradle:
 .idea/gradle.xml
