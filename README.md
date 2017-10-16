@@ -13,9 +13,19 @@ On successful completion a plp-summary.json file is created containing the PLP d
 # Building
 This project is using gradle for building.
 
-In order to build follow the steps below:
+For Linux/macOx:
+
+Gradle uses the following command structure ``./gradlew <task> (on Unix-like platforms such as Linux and Mac OS X)``.
+In order to build this project follow the steps below:
 1. Check out the code to your machine from the following location ``https://github.com/rupritch/plp-summary.git``.
 2. From the root of the checked out project run ``./gradlew clean build``.
+
+For Windows:
+
+Gradle uses the following command structure ``gradlew <task> (on Windows using the gradlew.bat batch file)``.
+In order to build this project follow the steps below:
+1. Check out the code to your machine from the following location ``https://github.com/rupritch/plp-summary.git``.
+2. From the root of the checked out project run ``gradlew build``.
 
 # Running The Tests
 
