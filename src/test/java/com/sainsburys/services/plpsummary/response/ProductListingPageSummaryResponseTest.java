@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Test class for ProductListingPageSummaryResponse.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ProductListingPageSummaryResponseTest {
 

@@ -7,7 +7,8 @@ import java.util.List;
 
 /**
  * Reads the information from a given source location for a ProductListingPage and returns a response object
- * containing a summary of the products located within the page.
+ * containing a summary of the products contained within the page.
+ * This has been written to allow multiple future reader implementations (eg websource, db source, webservice)
  */
 public interface ProductListingPageSummaryReader {
 

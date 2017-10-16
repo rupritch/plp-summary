@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Reads through a PLP html document and returns a list of PDP urls containing within it.
+ * Reads through a PLP html document and returns a list of PDP urls contained within it.
  */
 public class ProductListingPageHtmlReader {
 
@@ -19,6 +19,7 @@ public class ProductListingPageHtmlReader {
 
     /**
      * Creates a list of product detail page absolute urls for each product on the passed in product listing page.
+     * Every passed in PLP is expected to contain products.
      * @param plpUrl: html document for the product listing page.
      * @return list of product details page urls.
      */
@@ -33,6 +34,12 @@ public class ProductListingPageHtmlReader {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Reads the title of the PLP. Each PLP is expected to contain a title.
+     * @param plpUrl: url of the PLP.
+     * @return String: PLP title.
+     * @throws IOException: Something when wrong connecting to url. This is critical.
+     */
     public String readProductListingPageTitle(final String plpUrl) throws IOException {
 
         logger.debug("Reading PLP title");

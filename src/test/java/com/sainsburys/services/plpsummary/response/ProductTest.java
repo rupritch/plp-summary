@@ -8,6 +8,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.math.BigDecimal;
 
+/**
+ * Test class for Product.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ProductTest {
 

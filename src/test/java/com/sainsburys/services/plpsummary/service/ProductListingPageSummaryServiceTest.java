@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Test class for ProductListingPageSummaryService.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ProductListingPageSummaryServiceTest {
 

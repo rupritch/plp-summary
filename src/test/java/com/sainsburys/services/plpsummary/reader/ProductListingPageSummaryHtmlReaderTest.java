@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Test class for ProductListingPageSummaryHtmlReader.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ProductListingPageSummaryHtmlReaderTest {
 

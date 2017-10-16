@@ -6,6 +6,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Test class for ProductListingPageSummaryRequest.
+ */
 public class ProductListingPageSummaryRequestTest {
 
     @Test

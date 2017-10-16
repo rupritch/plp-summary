@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+/**
+ * Test class for ProductDetailsHtmlReader.
+ */
 public class ProductDetailsHtmlReaderTest {
 
     @Test

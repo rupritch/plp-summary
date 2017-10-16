@@ -58,7 +58,7 @@ public class ProductListingPageSummaryHtmlReader implements ProductListingPageSu
                 productListingPageSummaryList.add(productListingPageSummary);
             }
         } else {
-            throw new IllegalArgumentException("One of the passed in urls is not valid: " + urlList);
+            throw new IllegalArgumentException("One of the passed in urls is not valid, please review list: " + urlList);
         }
         productListingPageSummaryResponse.setProductListingPageSummaries(productListingPageSummaryList);
         return productListingPageSummaryResponse;
@@ -79,7 +79,7 @@ public class ProductListingPageSummaryHtmlReader implements ProductListingPageSu
     }
 
     /**
-     * Checks to see if the url to be called is valid.
+     * Checks to see if the url to be called is valid. It is deemed valid if it contains the string sainsburys and passes the UrlValidator check.
      * @param url: url to scrape.
      * @return boolean: true if valid, false is not.
      */
