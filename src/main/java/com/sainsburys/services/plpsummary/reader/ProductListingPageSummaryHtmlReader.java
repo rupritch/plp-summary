@@ -7,13 +7,20 @@ import com.sainsburys.services.plpsummary.response.ProductListingPageSummaryResp
 import org.apache.commons.validator.routines.UrlValidator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Creates a summary of single or multiple product listing pages.
+ */
 public class ProductListingPageSummaryHtmlReader implements ProductListingPageSummaryReader {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductListingPageSummaryHtmlReader.class);
 
     private ProductListingPageSummaryResponse productListingPageSummaryResponse;
 
@@ -39,18 +46,19 @@ public class ProductListingPageSummaryHtmlReader implements ProductListingPageSu
     @Override
     public ProductListingPageSummaryResponse readMultipleProductListingPages(final List<String> urlList) throws IOException {
 
+        logger.debug("Entering PLP Summary HTML Reader for multiple urls");
         List<ProductListingPageSummary> productListingPageSummaryList = new ArrayList<>();
-        for (String url : urlList) {
-            if (isUrlValid(url)) {
+        if (isUrlListValid(urlList)) {
+            for (String url : urlList) {
                 List<String> pdpUrlList = productListingPageHtmlReader.createListOfProductDetailPageUrlsForPage(url);
                 productListingPageSummary.setProductListingPageTitle(productListingPageHtmlReader.readProductListingPageTitle(url));
                 productListingPageSummary.setProductList(createListOfProducts(pdpUrlList));
                 productListingPageSummary.setTotal(total);
                 total = BigDecimal.valueOf(0.00).setScale(2, BigDecimal.ROUND_HALF_UP);;
                 productListingPageSummaryList.add(productListingPageSummary);
-            } else {
-                throw new IllegalArgumentException("Passed in url is not valid: " + url);
             }
+        } else {
+            throw new IllegalArgumentException("One of the passed in urls is not valid: " + urlList);
         }
         productListingPageSummaryResponse.setProductListingPageSummaries(productListingPageSummaryList);
         return productListingPageSummaryResponse;
@@ -59,6 +67,7 @@ public class ProductListingPageSummaryHtmlReader implements ProductListingPageSu
     @Override
     public ProductListingPageSummaryResponse readSingleProductListingPage(final String url) throws IOException {
 
+        logger.debug("Entering PLP Summary HTML Reader for single url");
         if (isUrlValid(url)) {
             List<String> pdpUrlList = productListingPageHtmlReader.createListOfProductDetailPageUrlsForPage(url);
             productListingPageSummaryResponse.setProductList(createListOfProducts(pdpUrlList));
@@ -76,9 +85,26 @@ public class ProductListingPageSummaryHtmlReader implements ProductListingPageSu
      */
     private boolean isUrlValid(final String url) {
 
+        logger.debug("Validating url");
         String[] schemes = {"http","https"};
         UrlValidator urlValidator = new UrlValidator(schemes);
-        return urlValidator.isValid(url);
+        return urlValidator.isValid(url) && url.contains("sainsburys");
+    }
+
+    /**
+     * Checks to see if the list of plp urls passed in are valid. If one out of the list is invalid it will return false.
+     * @param urlList: List of urls to scrape.
+     * @return boolean: true if all valid, false if not.
+     */
+    private boolean isUrlListValid(final List<String> urlList) {
+
+        logger.debug("Validating url list");
+        for (String url : urlList) {
+            if (!isUrlValid(url)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -89,9 +115,10 @@ public class ProductListingPageSummaryHtmlReader implements ProductListingPageSu
      */
     private List<Product> createListOfProducts(final List<String> pdpUrlList) throws IOException {
 
+        logger.debug("Creating list of products for each PDP");
         List<Product> productList = new ArrayList<>();
-
         for (String str : pdpUrlList) {
+            logger.info("Creating list of products on PDP: " + str);
             Product product = productDetailsHtmlReader.readProductDetails(parseHtmlFromUrl(str));
             productList.add(product);
             total = total.add(product.getPricePerUnit());
@@ -101,17 +128,13 @@ public class ProductListingPageSummaryHtmlReader implements ProductListingPageSu
 
     /**
      * Reads in the html from a given url.
-     * @param url: url of the webpage to be read.
+     * @param pdpUrl: url of the product details webpage to be read.
      * @return Document: Html document containing all the html from the given url.
-     * @throws IOException
+     * @throws IOException: Something has gone wrong connecting to the url - letting this bubble up to the caller as it is a fatal error.
      */
-    private Document parseHtmlFromUrl(final String url) throws IOException {
+    private Document parseHtmlFromUrl(final String pdpUrl) throws IOException {
 
-        if (!url.contains(".html")) {
-            Document document = Jsoup.connect(url).get();
-            String baseUri = document.baseUri();
-            return Jsoup.connect(baseUri + ".html").get();
-        }
-        return Jsoup.connect(url).get();
+        logger.info("Parsing PDP url: " + pdpUrl);
+        return Jsoup.connect(pdpUrl).get();
     }
 }

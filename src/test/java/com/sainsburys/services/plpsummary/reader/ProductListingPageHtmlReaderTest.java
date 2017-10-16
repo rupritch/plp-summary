@@ -29,6 +29,19 @@ public class ProductListingPageHtmlReaderTest {
         Assert.assertFalse(pdpUrlsResponse.contains("https://dummyurl.com/page.html"));
     }
 
+    @Test
+    public void shouldReadPlpTitleGivenPlpUrlThatContainsTitle() throws IOException {
+
+        //Given
+        ProductListingPageHtmlReader productListingPageHtmlReader = new ProductListingPageHtmlReader();
+
+        //When
+        String pageTitle = productListingPageHtmlReader.readProductListingPageTitle(URL);
+
+        //Then
+        Assert.assertEquals("Berries, cherries & currants (17 products available)", pageTitle);
+    }
+
     @Test(expected = IOException.class)
     public void shouldThrowIOExceptionGivenUnreachablePlpUrl() throws IOException {
 
